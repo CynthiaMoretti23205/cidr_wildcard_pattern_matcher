@@ -19,3 +19,10 @@ Migrating legacy firewall rules often means translating glob-style patterns into
 - Only dotted-decimal IPv4 with four octets is accepted. IPv6, hostnames, and leading-zero octal forms (`010`) are rejected with `ValueError`.
 - The wildcard `*` matches one whole octet (any value 0–255), not an arbitrary run of characters.
 - Addresses and patterns with fewer or more than four dot-separated fields raise `ValueError`.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
